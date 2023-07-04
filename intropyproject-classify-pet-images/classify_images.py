@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 # */AIPND-revision/intropyproject-classify-pet-images/classify_images.py
 #                                                                             
-# PROGRAMMER: 
-# DATE CREATED:                                 
+# PROGRAMMER: Livya Kendi
+# DATE CREATED: 4th July 2023                              
 # REVISED DATE: 
 # PURPOSE: Create a function classify_images that uses the classifier function 
 #          to create the classifier labels and then compares the classifier 
@@ -30,7 +30,7 @@ from classifier import classifier
 #       data type so no return is needed.
 # 
 def classify_images(images_dir, results_dic, model):
-     """
+    """
     Creates classifier labels with classifier function, compares pet labels to 
     the classifier labels, and adds the classifier label and the comparison of 
     the labels to the results dictionary using the extend function. Be sure to
@@ -45,75 +45,37 @@ def classify_images(images_dir, results_dic, model):
     a 'dalmatian'(pet label) and it will match to the classifier label 
     'dalmatian, coach dog, carriage dog' if the classifier function correctly 
     classified the pet images of dalmatians.
-     PLEASE NOTE: This function uses the classifier() function defined in 
-     classifier.py within this function. The proper use of this function is
-     in test_classifier.py Please refer to this program prior to using the 
-     classifier() function to classify images within this function 
-     Parameters: 
-      images_dir - The (full) path to the folder of images that are to be
-                   classified by the classifier function (string)
-      results_dic - Results Dictionary with 'key' as image filename and 'value'
-                    as a List. Where the list will contain the following items: 
-                  index 0 = pet image label (string)
-                --- where index 1 & index 2 are added by this function ---
-                  NEW - index 1 = classifier label (string)
-                  NEW - index 2 = 1/0 (int)  where 1 = match between pet image
-                    and classifer labels and 0 = no match between labels
-      model - Indicates which CNN model architecture will be used by the 
-              classifier function to classify the pet images,
-              values must be either: resnet alexnet vgg (string)
-     Returns:
-           None - results_dic is mutable data type so no return needed.         
+    PLEASE NOTE: This function uses the classifier() function defined in 
+    classifier.py within this function. The proper use of this function is
+    in test_classifier.py Please refer to this program prior to using the 
+    classifier() function to classify images within this function 
+    Parameters: 
+        images_dir - The (full) path to the folder of images that are to be
+                     classified by the classifier function (string)
+        results_dic - Results Dictionary with 'key' as image filename and 'value'
+                      as a List. Where the list will contain the following items: 
+                      index 0 = pet image label (string)
+                    --- where index 1 & index 2 are added by this function ---
+                      NEW - index 1 = classifier label (string)
+                      NEW - index 2 = 1/0 (int)  where 1 = match between pet image
+                        and classifer labels and 0 = no match between labels
+        model - Indicates which CNN model architecture will be used by the 
+                classifier function to classify the pet images,
+                values must be either: resnet alexnet vgg (string)
+        Returns:
+            None - results_dic is mutable data type so no return needed.         
     """
-     
-     ## Defining lists to populate dictionary 
-filenames = ["Beagle_01141.jpg", "Beagle_01125.jpg", "skunk_029.jpg" ]
-pet_labels = ["beagle", "beagle", "skunk"]
-classifier_labels = ["walker hound, walker foxhound", "beagle",
-                     "skunk, polecat, wood pussy"]
-pet_label_is_dog = [1, 1, 0]
-classifier_label_is_dog = [1, 1, 0]
-
-## Defining empty dictionary
-results_dic = dict()
-    
-## Populates empty dictionary with both labels &indicates if they match (idx 2)
-for idx in range (0, len(filenames), 1):
-    # If first time key is assigned initialize the list with pet & 
-    # classifier labels
-    if filenames[idx] not in results_dic:
-        results_dic[filenames[idx]] = [ pet_labels[idx], classifier_labels[idx] ]
- 
-    # Determine if pet_labels matches classifier_labels using in operator
-    # - so if pet label is 'in' classifier label it's a match
-    # ALSO since Key already exists because labels were added, append 
-    # value to end of list for idx 2 
-    # if pet image label was FOUND then there is a match 
-    if pet_labels[idx] in classifier_labels[idx]:
-        results_dic[filenames[idx]].append(1)
-            
-    # if pet image label was NOT found then there is no match
-    else:
-        results_dic[filenames[idx]].append(0)
-
-## Populates dictionary with whether or not labels indicate a dog image (idx 3&4)
-for idx in range (0, len(filenames), 1):
-    # Key already exists, extend values to end of list for idx 3 & 4
-    results_dic[filenames[idx]].extend([pet_label_is_dog[idx], 
-                                       classifier_label_is_dog[idx]])
-        
-## Iterates through the list to print the results for each filename
-for key in results_dic:
-    print("\nFilename=", key, "\npet_image Label=", results_dic[key][0],
-          "\nClassifier Label=", results_dic[key][1], "\nmatch=",
-          results_dic[key][2], "\nImage is dog=", results_dic[key][3],
-          "\nClassifier is dog=", results_dic[key][4])                        
-
-    # Provides classifications of the results
-    if sum(results_dic[key][2:]) == 3:
-        print("*Breed Match*")
-    if sum(results_dic[key][3:]) == 2:
-        print("*Is-a-Dog Match*")
-    if sum(results_dic[key][3:]) == 0 and results_dic[key][2] == 1:
-        print("*NOT-a-Dog Match*")
-    
+    # Iterate through each image in the directory
+    for filename in results_dic:
+        # Create the file path
+        image_path = images_dir + '/' + filename
+        # Use the classifier function to classify the image
+        model_label = classifier(image_path, model)
+        # Format the classifier label to match the pet image label
+        model_label = model_label.lower().strip()
+        # Get the pet image label
+        pet_label = results_dic[filename][0]
+        # Check if the pet label is found in the model label
+        match = 1 if pet_label in model_label else 0
+        # Add the classifier label and match to the results dictionary
+        results_dic[filename].extend([model_label, match])
