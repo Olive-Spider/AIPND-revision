@@ -5,7 +5,7 @@
 # TODO 0: Add your information below for Programmer & Date Created.                                                                             
 # PROGRAMMER: Livya Kendi
 # DATE CREATED: 3rd July 2023                               
-# REVISED DATE: 
+# REVISED DATE: 4th July 2023 
 # PURPOSE: Classifies pet images using a pretrained CNN model, compares these
 #          classifications to the true identity of the pets in the images, and
 #          summarizes how well the CNN performed on the image classification task. 
@@ -62,7 +62,7 @@ def main():
     #             get_pet_labels(in_arg.dir)
     # This function creates the results dictionary that contains the results, 
     # this dictionary is returned from the function call as the variable results
-    results = get_pet_labels(None)
+    results = get_pet_labels(in_arg.dir)
 
     # Function that checks Pet Images in the results Dictionary using results    
     check_creating_pet_image_labels(results)

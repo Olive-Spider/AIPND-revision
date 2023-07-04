@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 # */AIPND-revision/intropyproject-classify-pet-images/get_pet_labels.py
 #                                                                             
-# PROGRAMMER: 
-# DATE CREATED:                                  
+# PROGRAMMER: Livya Kendi
+# DATE CREATED: 4th July 2023                              
 # REVISED DATE: 
 # PURPOSE: Create the function get_pet_labels that creates the pet labels from 
 #          the image's filename. This function inputs: 
@@ -19,6 +19,13 @@
 # Imports python modules
 from os import listdir
 
+## Retrieve the filenames from folder pet_images/
+filename_list = listdir("pet_images/")
+
+## Print 10 of the filenames from folder pet_images/
+print("\nPrints 10 filenames from folder pet_images/")
+for idx in range(0, 10, 1):
+    print("{:2d} file: {:>25}".format(idx + 1, filename_list[idx]) )
 # TODO 2: Define get_pet_labels function below please be certain to replace None
 #       in the return statement with results_dic dictionary that you create 
 #       with this function
@@ -42,4 +49,26 @@ def get_pet_labels(image_dir):
     """
     # Replace None with the results_dic dictionary that you created with this
     # function
-    return None
+       # Create an empty dictionary to store the results
+    results_dic = {}
+
+    # Retrieve the filenames from the given directory
+    filename_list = listdir(image_dir)
+
+    # Iterate through each filename
+    for filename in filename_list:
+        # Check if the filename starts with a period (hidden file)
+        if filename[0] != '.':
+            # Split the filename into words using '_' as the delimiter
+            pet_label = filename.lower().split("_")
+
+            # Join the words to form the pet label
+            pet_label = ' '.join(pet_label[:-1])
+
+            # Remove leading and trailing whitespace characters
+            pet_label = pet_label.strip()
+
+            # Add the pet label to the dictionary
+            results_dic[filename] = [pet_label]
+
+    return results_dic
